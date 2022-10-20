@@ -169,12 +169,12 @@ func Marshal(v any) ([]byte, error) {
 	return buf, nil
 }
 
-type isUnsetter interface {
-	IsUnset() bool
+type isZeroer interface {
+	MarshalJSONIsZero() bool
 }
 
 var (
-	jsonIsUnsetType = reflect.TypeOf((*isUnsetter)(nil)).Elem()
+	jsonIsUnsetType = reflect.TypeOf((*isZeroer)(nil)).Elem()
 )
 
 // MarshalIndent is like Marshal but applies Indent to format the output.
@@ -348,7 +348,7 @@ func (e *encodeState) error(err error) {
 
 func isEmptyValue(v reflect.Value) bool {
 	if v.Type().Implements(jsonIsUnsetType) {
-		return v.Interface().(isUnsetter).IsUnset()
+		return v.Interface().(isZeroer).MarshalJSONIsZero()
 	}
 
 	switch v.Kind() {

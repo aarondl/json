@@ -8,8 +8,8 @@ Implement the following interface to be able to omit a field of a custom type
 from the output:
 
 ```go
-type isUnsetter interface {
-	IsUnset() bool
+type isZeroer interface {
+	MarshalJSONIsZero() bool
 }
 ```
 
@@ -26,7 +26,7 @@ import (
 
 type OmitMe struct{}
 
-func (OmitMe) IsUnset() bool { return true }
+func (OmitMe) MarshalJSONIsZero() bool { return true }
 func (o OmitMe) MarshalJSON() ([]byte, error) {
 	return []byte(`5`), nil
 }
